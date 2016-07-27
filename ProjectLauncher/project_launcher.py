@@ -165,7 +165,7 @@ class ProjectLauncher:
             add_to_menu = False,
             parent = self.iface.mainWindow())
 
-        self.add_menu()
+        self.init_menu()
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -185,13 +185,32 @@ class ProjectLauncher:
         # substitute with your code.
         self.open_project()
 
-    def add_menu(self):
+    def init_menu(self):
+
+        menu = self.add_menu("SITNyon")
+
+        submenu1 = self.add_submenu("Service 1", menu)
+        self.add_menu_item(
+            "Projet 11", "/home/remi/qgis/projects/switzerland.qgs", submenu1
+        )
+        self.add_menu_item(
+            "Projet 12", "/home/remi/qgis/projects/nyon.qgs", submenu1
+        )
+
+        submenu2 = self.add_submenu("Service 2", menu)
+        self.add_menu_item(
+            "Projet 21", "/home/remi/qgis/projects/switzerland.qgs", submenu2
+        )
+
+    def add_menu(self, menu):
 
         iface = self.iface
 
         menu_bar = iface.editMenu().parentWidget()
-        menu = QMenu("SIT&Nyon", menu_bar)
+        menu = QMenu(menu, menu_bar)
         self.menu_action = menu_bar.addMenu(menu)
+
+        return menu
 
     def remove_menu(self):
 
@@ -200,7 +219,24 @@ class ProjectLauncher:
         menu_bar = iface.editMenu().parentWidget()
         menu_bar.removeAction(self.menu_action)
 
-    def open_project(self):
+    def add_submenu(self, submenu, menu):
+
+        submenu = QMenu(submenu, menu)
+        menu.addMenu(submenu)
+
+        return submenu
+
+    def add_menu_item(self, item, project, submenu):
 
         iface = self.iface
-        iface.addProject("/home/remi/qgis/projects/switzerland.qgs")
+
+        action = QAction(item, iface.mainWindow())
+        submenu.addAction(action)
+
+        helper = lambda _project: (lambda: self.open_project(_project))
+        action.triggered.connect(helper(project))
+
+    def open_project(self, project):
+
+        iface = self.iface
+        iface.addProject(project)
