@@ -28,7 +28,6 @@ import resources
 from project_launcher_dialog import ProjectLauncherDialog
 import os.path
 
-
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
 
@@ -45,25 +44,25 @@ class ProjectLauncher:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = QSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
-            'i18n',
-            'ProjectLauncher_{}.qm'.format(locale))
+            "i18n",
+            "ProjectLauncher_{}.qm".format(locale))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(locale_path)
 
-            if qVersion() > '4.3.3':
+            if qVersion() > "4.3.3":
                 QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Project Launcher')
+        self.menu = self.tr(u"&Project Launcher")
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'ProjectLauncher')
-        self.toolbar.setObjectName(u'ProjectLauncher')
+        self.toolbar = self.iface.addToolBar(u"ProjectLauncher")
+        self.toolbar.setObjectName(u"ProjectLauncher")
 
         self.menu_action = None
 
@@ -79,25 +78,24 @@ class ProjectLauncher:
         :returns: Translated version of message.
         :rtype: QString
         """
-        # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('ProjectLauncher', message)
-
+        # noinspection PyTypeChecker, PyArgumentList, PyCallByClass
+        return QCoreApplication.translate("ProjectLauncher", message)
 
     def add_action(
         self,
         icon_path,
         text,
         callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+        enabled_flag = True,
+        add_to_menu = True,
+        add_to_toolbar = True,
+        status_tip = None,
+        whats_this = None,
+        parent = None):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
-            path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
+            path (e.g. ":/plugins/foo/bar.png") or a normal file system path.
         :type icon_path: str
 
         :param text: Text that should be shown in menu items for this action.
@@ -159,29 +157,27 @@ class ProjectLauncher:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/ProjectLauncher/icon.png'
+        icon_path = ":/plugins/ProjectLauncher/icon.png"
         self.add_action(
             icon_path,
-            text=self.tr(u'Project Launcher'),
-            callback=self.run,
-            add_to_menu=False,
-            parent=self.iface.mainWindow())
+            text = self.tr(u"Project Launcher"),
+            callback = self.run,
+            add_to_menu = False,
+            parent = self.iface.mainWindow())
 
         self.add_menu()
-
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Project Launcher'),
+                self.tr(u"&Project Launcher"),
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
         del self.toolbar
 
         self.remove_menu()
-
 
     def run(self):
         """Run method that performs all the real work"""
