@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon
+from PyQt4.QtGui import QAction, QIcon, QMenu
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialog
@@ -64,6 +64,8 @@ class ProjectLauncher:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'ProjectLauncher')
         self.toolbar.setObjectName(u'ProjectLauncher')
+
+        self.menu_action = None
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -165,6 +167,8 @@ class ProjectLauncher:
             add_to_menu=False,
             parent=self.iface.mainWindow())
 
+        self.add_menu()
+
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -176,12 +180,29 @@ class ProjectLauncher:
         # remove the toolbar
         del self.toolbar
 
+        self.remove_menu()
+
 
     def run(self):
         """Run method that performs all the real work"""
         # Do something useful here - delete the line containing pass and
         # substitute with your code.
         self.open_project()
+
+    def add_menu(self):
+
+        iface = self.iface
+
+        menu_bar = iface.editMenu().parentWidget()
+        menu = QMenu("SIT&Nyon", menu_bar)
+        self.menu_action = menu_bar.addMenu(menu)
+
+    def remove_menu(self):
+
+        iface = self.iface
+
+        menu_bar = iface.editMenu().parentWidget()
+        menu_bar.removeAction(self.menu_action)
 
     def open_project(self):
 
