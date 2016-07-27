@@ -162,6 +162,7 @@ class ProjectLauncher:
             icon_path,
             text=self.tr(u'Project Launcher'),
             callback=self.run,
+            add_to_menu=False,
             parent=self.iface.mainWindow())
 
 
