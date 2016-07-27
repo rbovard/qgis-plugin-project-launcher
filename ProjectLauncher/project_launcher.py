@@ -180,4 +180,9 @@ class ProjectLauncher:
         """Run method that performs all the real work"""
         # Do something useful here - delete the line containing pass and
         # substitute with your code.
-        pass
+        self.open_project()
+
+    def open_project(self):
+
+        iface = self.iface
+        iface.addProject("/home/remi/qgis/projects/switzerland.qgs")
