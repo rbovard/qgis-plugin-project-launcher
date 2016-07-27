@@ -58,9 +58,6 @@ class ProjectLauncher:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
-        # Create the dialog (after translation) and keep reference
-        self.dlg = ProjectLauncherDialog()
-
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Project Launcher')
@@ -181,12 +178,6 @@ class ProjectLauncher:
 
     def run(self):
         """Run method that performs all the real work"""
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+        # Do something useful here - delete the line containing pass and
+        # substitute with your code.
+        pass

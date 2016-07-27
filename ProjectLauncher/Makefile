@@ -38,15 +38,13 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	project_launcher.py project_launcher_dialog.py
+	project_launcher.py
 
 PLUGINNAME = ProjectLauncher
 
 PY_FILES = \
 	__init__.py \
-	project_launcher.py project_launcher_dialog.py
-
-UI_FILES = project_launcher_dialog_base.ui
+	project_launcher.py
 
 EXTRAS = metadata.txt icon.png
 
@@ -105,7 +103,6 @@ deploy: compile
 	# $HOME/$(QGISDIR)/python/plugins
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vf $(UI_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 
@@ -186,7 +183,7 @@ clean:
 	@echo "------------------------------------"
 	@echo "Removing uic and rcc generated files"
 	@echo "------------------------------------"
-	rm $(COMPILED_UI_FILES) $(COMPILED_RESOURCE_FILES)
+	rm $(COMPILED_RESOURCE_FILES)
 
 doc:
 	@echo
