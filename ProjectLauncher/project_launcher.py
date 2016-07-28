@@ -232,6 +232,7 @@ class ProjectLauncher:
     def add_submenu(self, submenu, menu):
 
         submenu = QMenu(submenu, menu)
+        submenu.setIcon(QIcon(":/plugins/ProjectLauncher/icon_folder.png"))
         menu.addMenu(submenu)
 
         return submenu
@@ -241,6 +242,7 @@ class ProjectLauncher:
         iface = self.iface
 
         action = QAction(item, iface.mainWindow())
+        action.setIcon(QIcon(":/plugins/ProjectLauncher/icon_project.png"))
         submenu.addAction(action)
 
         helper = lambda _project: (lambda: self.open_project(_project))

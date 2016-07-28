@@ -2,4 +2,10 @@
     <qresource prefix="/plugins/ProjectLauncher" >
         <file>icon.png</file>
     </qresource>
+    <qresource prefix="/plugins/ProjectLauncher" >
+        <file>icon_folder.png</file>
+    </qresource>
+    <qresource prefix="/plugins/ProjectLauncher" >
+        <file>icon_project.png</file>
+    </qresource>
 </RCC>
