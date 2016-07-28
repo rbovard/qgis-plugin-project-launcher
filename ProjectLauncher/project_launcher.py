@@ -192,17 +192,24 @@ class ProjectLauncher:
 
         menu = self.add_menu(u"SITNyon")
 
-        submenu1 = self.add_submenu(u"Service 1", menu)
+        submenu1 = self.add_submenu(u"Linux", menu)
         self.add_menu_item(
-            u"Projet 11", u"/home/remi/qgis/projects/switzerland.qgs", submenu1
+            u"Switzerland", u"/home/remi/qgis/projects/switzerland.qgs",
+            submenu1
         )
         self.add_menu_item(
-            u"Projet 12", u"/home/remi/qgis/projects/nyon.qgs", submenu1
+            u"Nyon", u"/home/remi/qgis/projects/nyon.qgs",
+            submenu1
         )
 
-        submenu2 = self.add_submenu(u"Service 2", menu)
+        submenu2 = self.add_submenu(u"Windows", menu)
         self.add_menu_item(
-            u"Projet 21", u"/home/remi/qgis/projects/null.qgs", submenu2
+            u"Switzerland", u"S:\\Admin\\Dev\\Projets\\switzerland.qgs",
+            submenu2
+        )
+        self.add_menu_item(
+            u"Nyon", u"S:\\Admin\\Dev\\Projets\\nyon.qgs",
+            submenu2
         )
 
     def add_menu(self, menu):
