@@ -204,7 +204,7 @@ class ProjectLauncher:
 
         submenu2 = self.add_submenu(u"Service 2", menu)
         self.add_menu_item(
-            u"Projet 21", u"/home/remi/qgis/projects/switzerland.qgs", submenu2
+            u"Projet 21", u"/home/remi/qgis/projects/null.qgs", submenu2
         )
 
     def add_menu(self, menu):
@@ -255,3 +255,4 @@ class ProjectLauncher:
 
         else:
             iface.addProject(project_path)
+            project.setDirty(False)
