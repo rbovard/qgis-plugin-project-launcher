@@ -22,6 +22,7 @@
 """
 import os.path
 from qgis.core import QgsProject
+from qgis.gui import QgsMessageBar
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtCore import QFileInfo
 from PyQt4.QtGui import QAction, QIcon, QMenu
@@ -243,4 +244,14 @@ class ProjectLauncher:
     def open_project(self, project_path):
 
         iface = self.iface
-        iface.addProject(project_path)
+        project = QgsProject.instance()
+
+        if project.fileName() and project.isDirty():
+            iface.messageBar().pushMessage(
+                u"Projet modifié",
+                u"Enregistrer ou fermer le projet courant.",
+                QgsMessageBar.WARNING, 3
+            )
+
+        else:
+            iface.addProject(project_path)
