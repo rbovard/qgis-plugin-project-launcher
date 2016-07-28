@@ -20,13 +20,16 @@
  *                                                                         *
  ***************************************************************************/
 """
+import os.path
+from qgis.core import QgsProject
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt4.QtCore import QFileInfo
 from PyQt4.QtGui import QAction, QIcon, QMenu
+
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialog
 from project_launcher_dialog import ProjectLauncherDialog
-import os.path
 
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
@@ -188,19 +191,19 @@ class ProjectLauncher:
 
     def init_menu(self):
 
-        menu = self.add_menu("SITNyon")
+        menu = self.add_menu(u"SITNyon")
 
-        submenu1 = self.add_submenu("Service 1", menu)
+        submenu1 = self.add_submenu(u"Service 1", menu)
         self.add_menu_item(
-            "Projet 11", "/home/remi/qgis/projects/switzerland.qgs", submenu1
+            u"Projet 11", u"/home/remi/qgis/projects/switzerland.qgs", submenu1
         )
         self.add_menu_item(
-            "Projet 12", "/home/remi/qgis/projects/nyon.qgs", submenu1
+            u"Projet 12", u"/home/remi/qgis/projects/nyon.qgs", submenu1
         )
 
-        submenu2 = self.add_submenu("Service 2", menu)
+        submenu2 = self.add_submenu(u"Service 2", menu)
         self.add_menu_item(
-            "Projet 21", "/home/remi/qgis/projects/switzerland.qgs", submenu2
+            u"Projet 21", u"/home/remi/qgis/projects/switzerland.qgs", submenu2
         )
 
     def add_menu(self, menu):
@@ -237,7 +240,7 @@ class ProjectLauncher:
         helper = lambda _project: (lambda: self.open_project(_project))
         action.triggered.connect(helper(project))
 
-    def open_project(self, project):
+    def open_project(self, project_path):
 
         iface = self.iface
-        iface.addProject(project)
+        iface.addProject(project_path)
