@@ -29,8 +29,6 @@ from PyQt4.QtGui import QAction, QIcon, QMenu
 
 # Initialize Qt resources from file resources.py
 import resources
-# Import the code for the dialog
-from project_launcher_dialog import ProjectLauncherDialog
 
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
