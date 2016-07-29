@@ -21,6 +21,7 @@
  ***************************************************************************/
 """
 import os.path
+import ConfigParser
 from qgis.core import QgsProject
 from qgis.gui import QgsMessageBar
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
@@ -190,27 +191,21 @@ class ProjectLauncher:
 
     def init_menu(self):
 
-        menu = self.add_menu(u"SITNyon")
+        config = ConfigParser.ConfigParser()
+        config.read(os.path.join(self.plugin_dir, "projects.ini"))
 
-        submenu1 = self.add_submenu(u"Linux", menu)
-        self.add_menu_item(
-            u"Switzerland", u"/home/remi/qgis/projects/switzerland.qgs",
-            submenu1
-        )
-        self.add_menu_item(
-            u"Nyon", u"/home/remi/qgis/projects/nyon.qgs",
-            submenu1
-        )
+        menu_name = config.get("General", "name").decode("utf-8")
+        menu = self.add_menu(menu_name)
 
-        submenu2 = self.add_submenu(u"Windows", menu)
-        self.add_menu_item(
-            u"Switzerland", u"S:\\Admin\\Dev\\Projets\\switzerland.qgs",
-            submenu2
-        )
-        self.add_menu_item(
-            u"Nyon", u"S:\\Admin\\Dev\\Projets\\nyon.qgs",
-            submenu2
-        )
+        for section in config.sections():
+            if section != "General":
+                submenu = self.add_submenu(section.decode("utf-8"), menu)
+
+                for name, value in config.items(section):
+                    self.add_menu_item(
+                        name.decode("utf-8").capitalize(), value,
+                        submenu
+                    )
 
     def add_menu(self, menu):
 
