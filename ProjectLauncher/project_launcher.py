@@ -243,6 +243,7 @@ class ProjectLauncher:
         iface = self.iface
         project = QgsProject.instance()
 
+        # TODO: Need to handle this in a proper way
         if project.fileName() and project.isDirty():
             iface.messageBar().pushMessage(
                 u"Projet modifié",
