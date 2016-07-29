@@ -21,6 +21,7 @@
  ***************************************************************************/
 """
 import os.path
+import ConfigParser
 from qgis.core import QgsProject
 from qgis.gui import QgsMessageBar
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
@@ -29,8 +30,6 @@ from PyQt4.QtGui import QAction, QIcon, QMenu
 
 # Initialize Qt resources from file resources.py
 import resources
-# Import the code for the dialog
-from project_launcher_dialog import ProjectLauncherDialog
 
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
@@ -64,9 +63,6 @@ class ProjectLauncher:
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u"&Project Launcher")
-        # TODO: We are going to let the user set this up in a future iteration
-        #self.toolbar = self.iface.addToolBar(u"ProjectLauncher")
-        #self.toolbar.setObjectName(u"ProjectLauncher")
 
         self.menu_action = None
 
@@ -179,8 +175,6 @@ class ProjectLauncher:
                 self.tr(u"&Project Launcher"),
                 action)
             self.iface.removeToolBarIcon(action)
-        # remove the toolbar
-        #del self.toolbar
 
         self.remove_menu()
 
@@ -192,20 +186,21 @@ class ProjectLauncher:
 
     def init_menu(self):
 
-        menu = self.add_menu(u"SITNyon")
+        config = ConfigParser.ConfigParser()
+        config.read(os.path.join(self.plugin_dir, "projects.ini"))
 
-        submenu1 = self.add_submenu(u"Service 1", menu)
-        self.add_menu_item(
-            u"Projet 11", u"/home/remi/qgis/projects/switzerland.qgs", submenu1
-        )
-        self.add_menu_item(
-            u"Projet 12", u"/home/remi/qgis/projects/nyon.qgs", submenu1
-        )
+        menu_name = config.get("General", "name").decode("utf-8")
+        menu = self.add_menu(menu_name)
 
-        submenu2 = self.add_submenu(u"Service 2", menu)
-        self.add_menu_item(
-            u"Projet 21", u"/home/remi/qgis/projects/null.qgs", submenu2
-        )
+        for section in config.sections():
+            if section != "General":
+                submenu = self.add_submenu(section.decode("utf-8"), menu)
+
+                for name, value in config.items(section):
+                    self.add_menu_item(
+                        name.decode("utf-8").capitalize(), value,
+                        submenu
+                    )
 
     def add_menu(self, menu):
 
@@ -227,6 +222,7 @@ class ProjectLauncher:
     def add_submenu(self, submenu, menu):
 
         submenu = QMenu(submenu, menu)
+        submenu.setIcon(QIcon(":/plugins/ProjectLauncher/icon_folder.png"))
         menu.addMenu(submenu)
 
         return submenu
@@ -236,6 +232,7 @@ class ProjectLauncher:
         iface = self.iface
 
         action = QAction(item, iface.mainWindow())
+        action.setIcon(QIcon(":/plugins/ProjectLauncher/icon_project.png"))
         submenu.addAction(action)
 
         helper = lambda _project: (lambda: self.open_project(_project))
@@ -246,6 +243,7 @@ class ProjectLauncher:
         iface = self.iface
         project = QgsProject.instance()
 
+        # TODO: Need to handle this in a proper way
         if project.fileName() and project.isDirty():
             iface.messageBar().pushMessage(
                 u"Projet modifié",

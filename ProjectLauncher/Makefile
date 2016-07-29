@@ -46,7 +46,7 @@ PY_FILES = \
 	__init__.py \
 	project_launcher.py
 
-EXTRAS = metadata.txt icon.png
+EXTRAS = metadata.txt icon*.png projects.ini
 
 COMPILED_RESOURCE_FILES = resources.py
 
