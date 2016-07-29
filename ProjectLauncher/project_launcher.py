@@ -63,9 +63,6 @@ class ProjectLauncher:
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u"&Project Launcher")
-        # TODO: We are going to let the user set this up in a future iteration
-        #self.toolbar = self.iface.addToolBar(u"ProjectLauncher")
-        #self.toolbar.setObjectName(u"ProjectLauncher")
 
         self.menu_action = None
 
@@ -178,8 +175,6 @@ class ProjectLauncher:
                 self.tr(u"&Project Launcher"),
                 action)
             self.iface.removeToolBarIcon(action)
-        # remove the toolbar
-        #del self.toolbar
 
         self.remove_menu()
 
