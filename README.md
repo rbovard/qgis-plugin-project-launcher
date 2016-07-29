@@ -14,7 +14,7 @@ Copy the folder `ProjectLauncher` into `C:\Users\<username>\.qgis2\python\plugin
 > The files `Makefile` and `resources.qrc` are not necessary.
 
 ### Linux
-Build the plugin with Makefile:
+Build the plugin with _make_:
 
 ```bash
 make deploy
