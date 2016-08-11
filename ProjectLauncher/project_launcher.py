@@ -186,21 +186,43 @@ class ProjectLauncher:
 
     def init_menu(self):
 
-        config = ConfigParser.ConfigParser()
-        config.read(os.path.join(self.plugin_dir, "projects.ini"))
+        iface = self.iface
 
-        menu_name = config.get("General", "name").decode("utf-8")
-        menu = self.add_menu(menu_name)
+        projects_list = os.path.join(self.plugin_dir, "projects.ini")
 
-        for section in config.sections():
-            if section != "General":
-                submenu = self.add_submenu(section.decode("utf-8"), menu)
+        if os.path.exists(projects_list):
+            config = ConfigParser.ConfigParser()
+            config.read(projects_list)
 
-                for name, value in config.items(section):
-                    self.add_menu_item(
-                        name.decode("utf-8").capitalize(), value,
-                        submenu
-                    )
+            try:
+                menu_name = config.get("General", "name").decode("utf-8")
+                menu = self.add_menu(menu_name)
+
+                for section in config.sections():
+                    if section != "General":
+                        submenu = self.add_submenu(
+                            section.decode("utf-8"), menu
+                        )
+
+                        for name, value in config.items(section):
+                            self.add_menu_item(
+                                name.decode("utf-8").capitalize(), value,
+                                submenu
+                            )
+
+            except ConfigParser.Error, e:
+                iface.messageBar().pushMessage(
+                    u"Erreur dans le fichier {}".format(projects_list),
+                    "{}".format(e),
+                    QgsMessageBar.CRITICAL
+                )
+
+        else:
+            iface.messageBar().pushMessage(
+                u"Fichier introuvable",
+                "{}".format(projects_list),
+                QgsMessageBar.CRITICAL
+            )
 
     def add_menu(self, menu):
 
