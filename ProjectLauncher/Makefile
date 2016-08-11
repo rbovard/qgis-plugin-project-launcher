@@ -38,15 +38,17 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	project_launcher.py
+	project_launcher.py \
+	my_settings.py
 
 PLUGINNAME = ProjectLauncher
 
 PY_FILES = \
 	__init__.py \
-	project_launcher.py
+	project_launcher.py \
+	my_settings.py
 
-EXTRAS = metadata.txt icon*.png projects.ini
+EXTRAS = metadata.txt icon*.png projects.ini qgissettingmanager
 
 COMPILED_RESOURCE_FILES = resources.py
 
@@ -104,7 +106,7 @@ deploy: compile
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
-	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	cp -rvf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 
 # The dclean target removes compiled python files from plugin directory
 # also deletes any .git entry

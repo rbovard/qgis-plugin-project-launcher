@@ -27,6 +27,7 @@ from qgis.gui import QgsMessageBar
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtCore import QFileInfo
 from PyQt4.QtGui import QAction, QIcon, QMenu
+from my_settings import MySettings
 
 # Initialize Qt resources from file resources.py
 import resources
@@ -65,6 +66,7 @@ class ProjectLauncher:
         self.menu = self.tr(u"&Project Launcher")
 
         self.menu_action = None
+        self.settings = MySettings()
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -188,13 +190,14 @@ class ProjectLauncher:
 
         iface = self.iface
 
-        projects_list = os.path.join(self.plugin_dir, "projects.ini")
+        projects_list = self.settings.value("projects_list")
 
         if os.path.exists(projects_list):
-            config = ConfigParser.ConfigParser()
-            config.read(projects_list)
 
             try:
+                config = ConfigParser.ConfigParser()
+                config.read(projects_list)
+
                 menu_name = config.get("General", "name").decode("utf-8")
                 menu = self.add_menu(menu_name)
 
