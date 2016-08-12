@@ -20,6 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+
 import os.path
 import ConfigParser
 from qgis.core import QgsProject
@@ -31,6 +32,8 @@ from my_settings import MySettings
 
 # Initialize Qt resources from file resources.py
 import resources
+# Import the code for the dialog
+from project_launcher_dialog import ProjectLauncherDialog
 
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
@@ -60,6 +63,9 @@ class ProjectLauncher:
 
             if qVersion() > "4.3.3":
                 QCoreApplication.installTranslator(self.translator)
+
+        # Create the dialog (after translation) and keep reference
+        self.dlg = ProjectLauncherDialog()
 
         # Declare instance attributes
         self.actions = []
@@ -162,9 +168,9 @@ class ProjectLauncher:
         icon_path = ":/plugins/ProjectLauncher/icon.png"
         self.add_action(
             icon_path,
-            text = self.tr(u"Project Launcher"),
+            text = self.tr(u"Paramètres"),
             callback = self.run,
-            add_to_menu = False,
+            add_to_menu = True,
             add_to_toolbar = False,
             parent = self.iface.mainWindow())
 
@@ -182,9 +188,14 @@ class ProjectLauncher:
 
     def run(self):
         """Run method that performs all the real work"""
-        # Do something useful here - delete the line containing pass and
-        # substitute with your code.
-        self.open_project()
+        # show the dialog
+        self.dlg.show()
+        # Run the dialog event loop
+        result = self.dlg.exec_()
+        # See if OK was pressed
+        if result:
+            self.remove_menu()
+            self.init_menu()
 
     def init_menu(self):
 

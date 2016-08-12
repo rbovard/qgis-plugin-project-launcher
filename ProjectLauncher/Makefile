@@ -38,15 +38,15 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	project_launcher.py \
-	my_settings.py
+	project_launcher.py project_launcher_dialog.py my_settings.py
 
 PLUGINNAME = ProjectLauncher
 
 PY_FILES = \
 	__init__.py \
-	project_launcher.py \
-	my_settings.py
+	project_launcher.py project_launcher_dialog.py my_settings.py
+
+UI_FILES = project_launcher_dialog_base.ui
 
 EXTRAS = metadata.txt icon*.png projects.ini qgissettingmanager
 
@@ -105,6 +105,7 @@ deploy: compile
 	# $HOME/$(QGISDIR)/python/plugins
 	mkdir -p $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
+	cp -vf $(UI_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vf $(COMPILED_RESOURCE_FILES) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -rvf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 
@@ -185,7 +186,7 @@ clean:
 	@echo "------------------------------------"
 	@echo "Removing uic and rcc generated files"
 	@echo "------------------------------------"
-	rm $(COMPILED_RESOURCE_FILES)
+	rm $(COMPILED_UI_FILES) $(COMPILED_RESOURCE_FILES)
 
 doc:
 	@echo
