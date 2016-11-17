@@ -20,6 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+
 import os.path
 import ConfigParser
 from qgis.core import QgsProject
@@ -27,9 +28,12 @@ from qgis.gui import QgsMessageBar
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtCore import QFileInfo
 from PyQt4.QtGui import QAction, QIcon, QMenu
+from my_settings import MySettings
 
 # Initialize Qt resources from file resources.py
 import resources
+# Import the code for the dialog
+from project_launcher_dialog import ProjectLauncherDialog
 
 class ProjectLauncher:
     """QGIS Plugin Implementation."""
@@ -60,11 +64,15 @@ class ProjectLauncher:
             if qVersion() > "4.3.3":
                 QCoreApplication.installTranslator(self.translator)
 
+        # Create the dialog (after translation) and keep reference
+        self.dlg = ProjectLauncherDialog()
+
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u"&Project Launcher")
 
         self.menu_action = None
+        self.settings = MySettings()
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -160,9 +168,9 @@ class ProjectLauncher:
         icon_path = ":/plugins/ProjectLauncher/icon.png"
         self.add_action(
             icon_path,
-            text = self.tr(u"Project Launcher"),
+            text = self.tr(u"Paramètres"),
             callback = self.run,
-            add_to_menu = False,
+            add_to_menu = True,
             add_to_toolbar = False,
             parent = self.iface.mainWindow())
 
@@ -180,27 +188,55 @@ class ProjectLauncher:
 
     def run(self):
         """Run method that performs all the real work"""
-        # Do something useful here - delete the line containing pass and
-        # substitute with your code.
-        self.open_project()
+        # show the dialog
+        self.dlg.show()
+        # Run the dialog event loop
+        result = self.dlg.exec_()
+        # See if OK was pressed
+        if result:
+            self.remove_menu()
+            self.init_menu()
 
     def init_menu(self):
 
-        config = ConfigParser.ConfigParser()
-        config.read(os.path.join(self.plugin_dir, "projects.ini"))
+        iface = self.iface
 
-        menu_name = config.get("General", "name").decode("utf-8")
-        menu = self.add_menu(menu_name)
+        projects_list = self.settings.value("projects_list")
 
-        for section in config.sections():
-            if section != "General":
-                submenu = self.add_submenu(section.decode("utf-8"), menu)
+        if os.path.exists(projects_list):
 
-                for name, value in config.items(section):
-                    self.add_menu_item(
-                        name.decode("utf-8").capitalize(), value,
-                        submenu
-                    )
+            try:
+                config = ConfigParser.ConfigParser()
+                config.read(projects_list)
+
+                menu_name = config.get("General", "name").decode("utf-8")
+                menu = self.add_menu(menu_name)
+
+                for section in config.sections():
+                    if section != "General":
+                        submenu = self.add_submenu(
+                            section.decode("utf-8"), menu
+                        )
+
+                        for name, value in config.items(section):
+                            self.add_menu_item(
+                                name.decode("utf-8").capitalize(), value,
+                                submenu
+                            )
+
+            except ConfigParser.Error, e:
+                iface.messageBar().pushMessage(
+                    u"Erreur dans le fichier {}".format(projects_list),
+                    "{}".format(e),
+                    QgsMessageBar.CRITICAL
+                )
+
+        else:
+            iface.messageBar().pushMessage(
+                u"Fichier introuvable",
+                "{}".format(projects_list),
+                QgsMessageBar.CRITICAL
+            )
 
     def add_menu(self, menu):
 
